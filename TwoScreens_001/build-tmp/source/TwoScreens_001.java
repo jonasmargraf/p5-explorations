@@ -24,7 +24,7 @@ public class TwoScreens_001 extends PApplet {
 // jmargraf@berklee.edu
 
 // remember to start the server from the command line first!
-// 	java -jar mpeServer-2.0.2.jar -verbose -framerate30 -screens2
+// 	java -jar mpeServer-2.0.2.jar -screens2
 
 
 
