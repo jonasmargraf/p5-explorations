@@ -1,0 +1,31 @@
+<settings>
+        <!--ID of client-->
+    <id>0</id>
+    <name>renderer0</name>  <!-- optional -->
+        <!--Server address, localhost for testing-->
+    <server>
+        <ip>169.254.154.196</ip>
+        <port>9002</port> 
+    </server>
+        <!--Dimensions of this screen-->
+    <local_dimensions>
+        <width>1920</width>
+        <height>400</height>
+    </local_dimensions>
+        <!--Location of this screen (to-left corner)-->
+    <local_location>
+        <x>0</x>
+        <y>0</y>
+    </local_location>
+        <!--Dimensions of entire screen-->
+    <master_dimensions>
+        <width>3840</width>
+        <height>400</height>
+    </master_dimensions>
+        <!--Set to true to automatically line up screens next to each other-->
+    <offset_window>false</offset_window>
+        <!--Set to true to see console printing.-->
+    <verbose>false</verbose>
+        <!--Set to true to run multiple screens without server.-->
+    <simulation fps="30">false</simulation>
+</settings>
