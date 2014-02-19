@@ -7,6 +7,7 @@ int n_points = 500;
 float x, y, freqX, freqY, angle, phiX, phiY;
 
 void setup() {
+	// size(displayWidth, displayHeight, "processing.core.PGraphicsRetina2D");
 	size(displayWidth, displayHeight);
 	background(0);
 	
@@ -23,7 +24,7 @@ void draw() {
 	noStroke();
 	rect(0, 0, width, height);
 	noFill();
-	stroke(255, 255);
+	stroke(255);
 	// println(freqX + "\t" + freqY);
 
 	// pushMatrix();
@@ -35,8 +36,8 @@ void draw() {
 		x = sin(angle * freqX + radians(phiX));
 		y = sin(angle * freqY);
 
-		x = x * 900;
-		y = y * 400;
+		x = x * 300;
+		y = y * 300;
 
 		vertex(x, y);
 	}
@@ -56,18 +57,18 @@ void draw() {
 	//   }
 	// endShape();
 
-	phiX = (phiX + 1) % 360;
+	phiX = (phiX + 0.5) % 360;
 	// println(phiX);
 
-	freqX += 0.01;
-	freqY += 0.005;
-	if (frameCount % 10 == 0){
-		freqX += random(-0.2, 0.2);
-		freqY += random(-0.2, 0.2);
-	}
+	freqX += 0.001 + random(0.01);
+	freqY += 0.0005 + random(0.01);
+	// if (frameCount % 10 == 0){
+	// 	freqX += random(-0.2, 0.2);
+	// 	freqY += random(-0.2, 0.2);
+	// }
 
 	// popMatrix();
 	frame.setTitle(" " + frameRate);
-	stroke(255, 255);
+	fill(255, 255);
 	text(frameRate, width*0.45, height*0.45);
 }

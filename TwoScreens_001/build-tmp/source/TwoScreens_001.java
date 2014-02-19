@@ -37,6 +37,7 @@ public void setup() {
 	size(client.getLWidth(), client.getLHeight());
 	resetEvent(client);
 	client.start();
+	randomSeed(1000);
 }
 
 public void resetEvent(TCPClient c) {
@@ -53,9 +54,10 @@ public void frameEvent(TCPClient c) {
 	background(255);
 	// background(int(random(255)), 0, 0);
 	fill(255, 0, 0, 150);
-	ellipse(x, y, 100, 100);
+	ellipse(x, y, 150, 150);
 
-	x = (x + 10) % (client.getMWidth() + 50);
+	x = (x + 10 + sin(x)) % (client.getMWidth() + 50);
+	y = (y + 10 + sin(y)) % (client.getMHeight() - 50);
 	// x += 5;
 }
   static public void main(String[] passedArgs) {
