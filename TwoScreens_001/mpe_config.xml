@@ -9,7 +9,7 @@
     </server>
         <!--Dimensions of this screen-->
     <local_dimensions>
-        <width>1920</width>
+        <width>1440</width>
         <height>400</height>
     </local_dimensions>
         <!--Location of this screen (to-left corner)-->
@@ -19,7 +19,7 @@
     </local_location>
         <!--Dimensions of entire screen-->
     <master_dimensions>
-        <width>3840</width>
+        <width>3480</width>
         <height>400</height>
     </master_dimensions>
         <!--Set to true to automatically line up screens next to each other-->
