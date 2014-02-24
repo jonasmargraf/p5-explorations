@@ -3,16 +3,16 @@
 // Jonas Margraf
 // jmargraf@berklee.edu
 
-int n_points = 500;
+int n_points = 2000;
 float x, y, freqX, freqY, angle, phiX, phiY;
 
 void setup() {
 	// size(displayWidth, displayHeight, "processing.core.PGraphicsRetina2D");
-	size(displayWidth, displayHeight);
+	size(displayWidth, displayHeight, OPENGL);
 	background(0);
 	
-	freqX = 1;
-	freqY = 2;
+	freqX = random(10);
+	freqY = random(20);
 	phiX = 300;
 	// phiY = 0;
 
@@ -20,11 +20,11 @@ void setup() {
 
 void draw() {
 	// background(0);
-	fill(0, 255);
+	fill(0, 100);
 	noStroke();
 	rect(0, 0, width, height);
 	noFill();
-	stroke(255);
+	stroke(255, 200);
 	// println(freqX + "\t" + freqY);
 
 	// pushMatrix();
@@ -36,8 +36,11 @@ void draw() {
 		x = sin(angle * freqX + radians(phiX));
 		y = sin(angle * freqY);
 
-		x = x * 300;
-		y = y * 300;
+		// x = x * width*0.45;
+		// y = y * 200;
+
+		x = x * 400;
+		y = y * 400;
 
 		vertex(x, y);
 	}
@@ -60,12 +63,14 @@ void draw() {
 	phiX = (phiX + 0.5) % 360;
 	// println(phiX);
 
-	freqX += 0.001 + random(0.01);
-	freqY += 0.0005 + random(0.01);
-	// if (frameCount % 10 == 0){
-	// 	freqX += random(-0.2, 0.2);
-	// 	freqY += random(-0.2, 0.2);
-	// }
+	freqX += 0.00005;
+	freqY += 0.0000025;
+	freqX = freqX % 10;
+	freqY = freqY % 50;
+	if (frameCount % 6 == 0){
+		freqX = random(3);
+		freqY = random(3);
+	}
 
 	// popMatrix();
 	frame.setTitle(" " + frameRate);

@@ -160,7 +160,7 @@ public void oscEvent(OscMessage theOscMessage) {
 			println("control_point2_y = " + control_point2_y);
 	}
 
-	// println(theOscMessage);
+	println(theOscMessage);
 
 }
 // a class encapsulates the agents that are drawn to the screen
@@ -205,7 +205,7 @@ class NoiseAgent {
 
 }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "--full-screen", "--bgcolor=#666666", "--stop-color=#cccccc", "NoiseAgent003_BezierOSC" };
+    String[] appletArgs = new String[] { "NoiseAgent003_BezierOSC" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {

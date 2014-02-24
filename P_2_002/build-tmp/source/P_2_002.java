@@ -63,7 +63,7 @@ public void keyReleased(){
 }
 
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "--full-screen", "--bgcolor=#666666", "--stop-color=#cccccc", "P_2_002" };
+    String[] appletArgs = new String[] { "P_2_002" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {

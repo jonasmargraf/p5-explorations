@@ -79,6 +79,6 @@ void oscEvent(OscMessage theOscMessage) {
 			println("control_point2_y = " + control_point2_y);
 	}
 
-	// println(theOscMessage);
+	println(theOscMessage);
 
 }

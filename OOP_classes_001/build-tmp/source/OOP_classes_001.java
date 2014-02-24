@@ -93,7 +93,7 @@ class Circle {
          }
 }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "--full-screen", "--bgcolor=#666666", "--stop-color=#cccccc", "OOP_classes_001" };
+    String[] appletArgs = new String[] { "OOP_classes_001" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
