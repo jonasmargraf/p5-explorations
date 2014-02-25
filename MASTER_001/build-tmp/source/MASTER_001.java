@@ -3,6 +3,7 @@ import processing.data.*;
 import processing.event.*; 
 import processing.opengl.*; 
 
+import mpe.client.*; 
 import oscP5.*; 
 import netP5.*; 
 import processing.opengl.*; 
@@ -18,9 +19,19 @@ import java.io.IOException;
 
 public class MASTER_001 extends PApplet {
 
+// Jonas Margraf
+// jmargraf@berklee.edu
+
+// remember to start the server from the command line first!
+// cd to directory with server .jar file, then:
+// java -jar mpeServer-2.0.2.jar -screens2
 
 
 
+
+
+
+TCPClient client;
 
 OscP5 oscP5;
 NetAddress myRemoteLocation;
@@ -36,8 +47,15 @@ int[] colors = new int[points];
 Lissajous2D lissajous2D = new Lissajous2D(15.23f, 2.02f);
 Lissajous3D lissajous3D = new Lissajous3D(15.23f, 2.02f, 1.5f);
 
-public void setup() {
+public void setup(){
+
+	client = new TCPClient(this, "mpe_config.xml");
+	
 	size(displayWidth, displayHeight, OPENGL);
+	
+	resetEvent(client);
+	client.start();
+
 	// setup OSC networking (see OSC.pde)
 	oscSetup();
 	// send those Processing parameters to Max that should be controllable
@@ -49,7 +67,11 @@ public void setup() {
 	calculateColors();
 }
 
-public void draw() {
+public void resetEvent(TCPClient c){}
+
+public void draw(){}
+
+public void frameEvent(TCPClient c){
 
 	ms = millis();
 	if (bump){
@@ -216,7 +238,7 @@ class Lissajous2D {
 public void oscSetup() {	
 
 	// start oscP5 at localhost, port 10001
-	oscP5 = new OscP5(this, 7003);
+	oscP5 = new OscP5(this, 7001);
 	// oscP5 = new OscP5(this, 7003);
 	// address for OSC messages to be sent to
 	myRemoteLocation = new NetAddress("127.0.0.1", 7002);

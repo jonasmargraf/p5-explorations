@@ -1,6 +1,16 @@
+// Jonas Margraf
+// jmargraf@berklee.edu
+
+// remember to start the server from the command line first!
+// cd to directory with server .jar file, then:
+// java -jar mpeServer-2.0.2.jar -screens2
+
+import mpe.client.*;
 import oscP5.*;
 import netP5.*;
 import processing.opengl.*;
+
+TCPClient client;
 
 OscP5 oscP5;
 NetAddress myRemoteLocation;
@@ -16,8 +26,15 @@ color[] colors = new color[points];
 Lissajous2D lissajous2D = new Lissajous2D(15.23, 2.02);
 Lissajous3D lissajous3D = new Lissajous3D(15.23, 2.02, 1.5);
 
-void setup() {
+void setup(){
+
+	client = new TCPClient(this, "mpe_config.xml");
+	
 	size(displayWidth, displayHeight, OPENGL);
+	
+	resetEvent(client);
+	client.start();
+
 	// setup OSC networking (see OSC.pde)
 	oscSetup();
 	// send those Processing parameters to Max that should be controllable
@@ -29,7 +46,11 @@ void setup() {
 	calculateColors();
 }
 
-void draw() {
+public void resetEvent(TCPClient c){}
+
+void draw(){}
+
+void frameEvent(TCPClient c){
 
 	ms = millis();
 	if (bump){

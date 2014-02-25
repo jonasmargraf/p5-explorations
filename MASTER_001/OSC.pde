@@ -28,12 +28,12 @@ void oscEvent(OscMessage theOscMessage) {
 
 	if (theOscMessage.checkAddrPattern("/scene")){
 		scene = theOscMessage.get(0).intValue();
-		println("scene " + scene);
+		// println("scene " + scene);
 	}
 
 	if (theOscMessage.checkAddrPattern("/zoom")){
 		bump = boolean(theOscMessage.get(0).stringValue());
-		println(bump);
+		// println(bump);
 	}
 	// println(theOscMessage);
 }
