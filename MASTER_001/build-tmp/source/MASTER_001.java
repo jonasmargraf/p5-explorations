@@ -7,6 +7,7 @@ import mpe.client.*;
 import oscP5.*; 
 import netP5.*; 
 import processing.opengl.*; 
+import java.util.Calendar; 
 
 import java.util.HashMap; 
 import java.util.ArrayList; 
@@ -31,10 +32,12 @@ public class MASTER_001 extends PApplet {
 
 
 
+
 TCPClient client;
 
 OscP5 oscP5;
 NetAddress myRemoteLocation;
+
 
 int points = 600;
 int ms, scene;
@@ -42,16 +45,20 @@ boolean bump;
 float r, g, b;
 float zoom = -100;
 
+Table table;
+
 int[] colors = new int[points];
+int[] imgColors;
 
 Lissajous2D lissajous2D = new Lissajous2D(15.23f, 2.02f);
 Lissajous3D lissajous3D = new Lissajous3D(15.23f, 2.02f, 1.5f);
 
 public void setup(){
 
-	client = new TCPClient(this, "mpe_config.xml");
+	// switch to "mpe_config2.xml" to simulate screen # 2
+	client = new TCPClient(this, "mpe_config2.xml");
 	
-	size(displayWidth, displayHeight, OPENGL);
+	size(client.getLWidth(), client.getLHeight(), OPENGL);
 	
 	resetEvent(client);
 	client.start();
@@ -65,6 +72,7 @@ public void setup(){
 	lissajous3D.calculatePoints();
 
 	calculateColors();
+	scene = 1;
 }
 
 public void resetEvent(TCPClient c){}
@@ -75,13 +83,13 @@ public void frameEvent(TCPClient c){
 
 	ms = millis();
 	if (bump){
-		zoom+= 55;
+		zoom+= 200;
 	}
 	else {
 		zoom-= 20;
 	}
 
-	zoom = constrain(zoom, -1200, 100);
+	zoom = constrain(zoom, -1000, 100);
 
 	switch(scene){
 		case 0:
@@ -93,11 +101,15 @@ public void frameEvent(TCPClient c){
 	}
 
 	// display FPS in window title bar
-	fill(255, 10);
+	// fill(255, 10);
 	frame.setTitle(" " + frameRate);
 }
 
 public void calculateColors(){
+
+	table = loadTable("colors.csv");
+	imgColors = new int[table.getRowCount()];
+
 	for (int i = 0; i < points; i++){
 		
 		if (i % 2 == 0) {
@@ -114,9 +126,16 @@ public void calculateColors(){
 
 		colors[i] = color(r, g, b);
 	}
+
+	for (int i = 0; i < imgColors.length; i++){
+		r = table.getFloat(i, 0);
+		g = table.getFloat(i, 1);
+		b = table.getFloat(i, 2);
+		imgColors[i] = color(r, g, b);
+	}
 }
 class Lissajous3D {
-	int pointCount = 600;
+	int pointCount = 10000;
 	float x, y, z;
 	float freqX, freqY, freqZ;
 	float phiX, phiY;
@@ -132,11 +151,11 @@ class Lissajous3D {
 	public void calculatePoints(){
 		lissajous3DPoints = new PVector[pointCount+1];
 		// f = scaling factor?
-		float f = width/5;
+		float f = client.getLWidth()/2;
 
 		for (int i = 0; i <= pointCount; i++){
 			angle = map(i, 0, pointCount, 0, TWO_PI);
-			x = sin(angle * freqX + radians(phiX)) * sin(angle * 2) * f;
+			x = sin(angle * freqX + radians(phiX)) * sin(angle * 2) * f*4;
 			y = sin(angle * freqY + radians(phiY)) * f;
 			z = sin(angle * freqZ) * f;
 			lissajous3DPoints[i] = new PVector(x, y, z);
@@ -144,10 +163,14 @@ class Lissajous3D {
 	}
 
 	public void display(){
+
+		noiseSeed(1);
+		randomSeed(2);
+
 		background(0);
 		lights();
 
-		if (ms % 2000 <= 10){
+		if (ms % 500 <= 20){
 			freqX = random(20);
 			freqY = random(5);
 			freqZ = random(10);
@@ -158,15 +181,23 @@ class Lissajous3D {
 
 		lissajous3D.calculatePoints();
 
-		translate(width/2, height/2, zoom);
+		// move midpoint to first display
+		// translate(client.getMWidth()*0.25, client.getMHeight()*0.5, zoom);
+		// move midpoint to second display
+		// translate(client.getMWidth()*0.75, client.getMHeight()*0.5, zoom);
+		// move midpoint to center of both displays
+		translate(client.getMWidth()*0.5f, client.getMHeight()*0.5f, zoom);
+
 
 		noStroke();
 		beginShape(TRIANGLE_FAN);
+		int j = imgColors.length;
 		for (int i = 0; i < pointCount-2; i++){
 			if (i % 3 == 0) {
-				fill(colors[i], 10);
+				j-= j - i;
+				fill(imgColors[i], 10);
 				vertex(0,0,0);
-				fill(colors[i], 120);
+				fill(imgColors[j], 220);
 				vertex(lissajous3DPoints[i].x, lissajous3DPoints[i].y,
 						lissajous3DPoints[i].z);
 				vertex(lissajous3DPoints[i+2].x, lissajous3DPoints[i+2].y,
@@ -199,13 +230,20 @@ class Lissajous2D {
 	}
 
 	public void display(){
+
+		noiseSeed(1);
+		randomSeed(2);
+
 		noLights();
 		fill(0, 100);
 		noStroke();
 		rect(0, 0, width, height);
 		noFill();
 		stroke(255, 200);
-		translate(width/2, height/2);
+		// move midpoint to first display
+		translate(client.getMWidth()*0.25f, client.getMHeight()*0.5f);
+		// move midpoint to second display
+		// translate(client.getMWidth()*0.75, client.getLHeight()*0.5, zoom);
 
 		beginShape();
 		for (int i = 0; i <= pointCount; i++){
@@ -265,12 +303,12 @@ public void oscEvent(OscMessage theOscMessage) {
 
 	if (theOscMessage.checkAddrPattern("/scene")){
 		scene = theOscMessage.get(0).intValue();
-		println("scene " + scene);
+		// println("scene " + scene);
 	}
 
 	if (theOscMessage.checkAddrPattern("/zoom")){
 		bump = PApplet.parseBoolean(theOscMessage.get(0).stringValue());
-		println(bump);
+		// println(bump);
 	}
 	// println(theOscMessage);
 }

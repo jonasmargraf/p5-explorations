@@ -43,7 +43,7 @@ void frameEvent(TCPClient c) {
 	// x = (x + 10 + random(2)) % (client.getMWidth() + 50);
 	// y = (y + 10 + random(2)) % (client.getMHeight() - 50);
 	if (x < client.getMWidth() && forward){
-		x+= 12;
+		x+= 20;
 	}
 
 	if (x >= client.getMWidth()){
@@ -51,7 +51,7 @@ void frameEvent(TCPClient c) {
 	}
 
 	if (x >= 0 && !forward){
-		x-= 12;
+		x-= 20;
 	}
 
 	if (x <= 0){

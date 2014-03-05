@@ -4,7 +4,7 @@
     <name>renderer0</name>  <!-- optional -->
         <!--Server address, localhost for testing-->
     <server>
-        <ip>169.254.75.75</ip>
+        <ip>169.254.41.119</ip>
         <port>9002</port> 
     </server>
         <!--Dimensions of this screen-->
@@ -19,7 +19,7 @@
     </local_location>
         <!--Dimensions of entire screen-->
     <master_dimensions>
-        <width>3480</width>
+        <width>3280</width>
         <height>400</height>
     </master_dimensions>
         <!--Set to true to automatically line up screens next to each other-->

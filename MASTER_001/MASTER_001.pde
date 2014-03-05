@@ -9,11 +9,13 @@ import mpe.client.*;
 import oscP5.*;
 import netP5.*;
 import processing.opengl.*;
+import java.util.Calendar;
 
 TCPClient client;
 
 OscP5 oscP5;
 NetAddress myRemoteLocation;
+
 
 int points = 600;
 int ms, scene;
@@ -21,16 +23,20 @@ boolean bump;
 float r, g, b;
 float zoom = -100;
 
+Table table;
+
 color[] colors = new color[points];
+color[] imgColors;
 
 Lissajous2D lissajous2D = new Lissajous2D(15.23, 2.02);
 Lissajous3D lissajous3D = new Lissajous3D(15.23, 2.02, 1.5);
 
 void setup(){
 
+	// switch to "mpe_config2.xml" to simulate screen # 2
 	client = new TCPClient(this, "mpe_config.xml");
 	
-	size(displayWidth, displayHeight, OPENGL);
+	size(client.getLWidth(), client.getLHeight(), OPENGL);
 	
 	resetEvent(client);
 	client.start();
@@ -44,6 +50,7 @@ void setup(){
 	lissajous3D.calculatePoints();
 
 	calculateColors();
+	scene = 1;
 }
 
 public void resetEvent(TCPClient c){}
@@ -54,13 +61,13 @@ void frameEvent(TCPClient c){
 
 	ms = millis();
 	if (bump){
-		zoom+= 55;
+		zoom+= 200;
 	}
 	else {
 		zoom-= 20;
 	}
 
-	zoom = constrain(zoom, -1200, 100);
+	zoom = constrain(zoom, -1000, 100);
 
 	switch(scene){
 		case 0:
@@ -72,11 +79,15 @@ void frameEvent(TCPClient c){
 	}
 
 	// display FPS in window title bar
-	fill(255, 10);
+	// fill(255, 10);
 	frame.setTitle(" " + frameRate);
 }
 
 void calculateColors(){
+
+	table = loadTable("colors.csv");
+	imgColors = new color[table.getRowCount()];
+
 	for (int i = 0; i < points; i++){
 		
 		if (i % 2 == 0) {
@@ -92,5 +103,12 @@ void calculateColors(){
 		}
 
 		colors[i] = color(r, g, b);
+	}
+
+	for (int i = 0; i < imgColors.length; i++){
+		r = table.getFloat(i, 0);
+		g = table.getFloat(i, 1);
+		b = table.getFloat(i, 2);
+		imgColors[i] = color(r, g, b);
 	}
 }

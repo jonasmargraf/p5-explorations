@@ -1,5 +1,5 @@
 class Lissajous3D {
-	int pointCount = 600;
+	int pointCount = 1000;
 	float x, y, z;
 	float freqX, freqY, freqZ;
 	float phiX, phiY;
@@ -15,11 +15,11 @@ class Lissajous3D {
 	void calculatePoints(){
 		lissajous3DPoints = new PVector[pointCount+1];
 		// f = scaling factor?
-		float f = width/5;
+		float f = client.getLWidth()/2;
 
 		for (int i = 0; i <= pointCount; i++){
 			angle = map(i, 0, pointCount, 0, TWO_PI);
-			x = sin(angle * freqX + radians(phiX)) * sin(angle * 2) * f;
+			x = sin(angle * freqX + radians(phiX)) * sin(angle * 2) * f*4;
 			y = sin(angle * freqY + radians(phiY)) * f;
 			z = sin(angle * freqZ) * f;
 			lissajous3DPoints[i] = new PVector(x, y, z);
@@ -27,10 +27,14 @@ class Lissajous3D {
 	}
 
 	void display(){
+
+		noiseSeed(1);
+		randomSeed(2);
+
 		background(0);
 		lights();
 
-		if (ms % 2000 <= 10){
+		if (ms % 500 <= 20){
 			freqX = random(20);
 			freqY = random(5);
 			freqZ = random(10);
@@ -41,15 +45,23 @@ class Lissajous3D {
 
 		lissajous3D.calculatePoints();
 
-		translate(width/2, height/2, zoom);
+		// move midpoint to first display
+		// translate(client.getMWidth()*0.25, client.getMHeight()*0.5, zoom);
+		// move midpoint to second display
+		// translate(client.getMWidth()*0.75, client.getMHeight()*0.5, zoom);
+		// move midpoint to center of both displays
+		translate(client.getMWidth()*0.5, client.getMHeight()*0.5, zoom);
+
 
 		noStroke();
 		beginShape(TRIANGLE_FAN);
+		int j = imgColors.length;
 		for (int i = 0; i < pointCount-2; i++){
 			if (i % 3 == 0) {
-				fill(colors[i], 10);
+				j-= j - i;
+				fill(imgColors[i], 10);
 				vertex(0,0,0);
-				fill(colors[i], 120);
+				fill(imgColors[j], 220);
 				vertex(lissajous3DPoints[i].x, lissajous3DPoints[i].y,
 						lissajous3DPoints[i].z);
 				vertex(lissajous3DPoints[i+2].x, lissajous3DPoints[i+2].y,
@@ -82,13 +94,20 @@ class Lissajous2D {
 	}
 
 	void display(){
+
+		noiseSeed(1);
+		randomSeed(2);
+
 		noLights();
 		fill(0, 100);
 		noStroke();
 		rect(0, 0, width, height);
 		noFill();
 		stroke(255, 200);
-		translate(width/2, height/2);
+		// move midpoint to first display
+		translate(client.getMWidth()*0.25, client.getMHeight()*0.5);
+		// move midpoint to second display
+		// translate(client.getMWidth()*0.75, client.getLHeight()*0.5, zoom);
 
 		beginShape();
 		for (int i = 0; i <= pointCount; i++){
